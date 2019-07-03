@@ -7,12 +7,31 @@ async function getScreenshot(url, type, quality, fullPage) {
         executablePath: await chrome.executablePath,
         headless: chrome.headless,
     });
-
+    
     const page = await browser.newPage();
-    await page.goto(url);
-    const file = await page.screenshot({ type,  quality, fullPage });
+    
+    await page.goto('https://www.indeed.com/salaries/Warehouse-Supervisor-Salaries,-San%20Francisco-CA')
+	// execute standard javascript in the context of the page.
+	const stories = await page.evaluate(() => {
+	    const raw_results = Array.from(document.querySelectorAll('div.cmp-sal-salary'))
+	    var salaries = 0;
+	    var wages = 0;
+	    for (var i=0; i < raw_results.length; i++) {
+	        if(raw_results[i].textContent.indexOf('per year') !== -1) {
+	            salaries = salaries + parseFloat(raw_results[i].textContent.replace('per year', '').replace('$', '').replace(',', ''));
+	        } else if (raw_results[i].textContent.indexOf('per hour') !== -1) {
+	            wages = wages + parseFloat(raw_results[i].textContent.replace('per hour', '').replace('$', '').replace(',', ''));
+	        }				
+	    }
+	    salaries = salaries + ((wages*40)*50);
+	    return Math.round(salaries/raw_results.length);
+	})
+	res.setHeader('Content-Type', 'application/json');
+	res.status(200).send(stories)
+	console.log(stories)
+    
     await browser.close();
-    return file;
+    return stories;
 }
 
 module.exports = { getScreenshot };

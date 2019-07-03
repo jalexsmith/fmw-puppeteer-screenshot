@@ -12,26 +12,9 @@ module.exports = async function (req, res) {
             res.setHeader('Content-Type', 'text/html');
             res.status(400).send(`<h1>Bad Request</h1><p>The url <em>${url}</em> is not valid.</p>`);
         } else {
-            await page.goto('https://www.indeed.com/salaries/Warehouse-Supervisor-Salaries,-San%20Francisco-CA')
-		
-			// execute standard javascript in the context of the page.
-			const stories = await page.evaluate(() => {
-			    const raw_results = Array.from(document.querySelectorAll('div.cmp-sal-salary'))
-			    var salaries = 0;
-			    var wages = 0;
-			    for (var i=0; i < raw_results.length; i++) {
-			        if(raw_results[i].textContent.indexOf('per year') !== -1) {
-			            salaries = salaries + parseFloat(raw_results[i].textContent.replace('per year', '').replace('$', '').replace(',', ''));
-			        } else if (raw_results[i].textContent.indexOf('per hour') !== -1) {
-			            wages = wages + parseFloat(raw_results[i].textContent.replace('per hour', '').replace('$', '').replace(',', ''));
-			        }				
-			    }
-			    salaries = salaries + ((wages*40)*50);
-			    return Math.round(salaries/raw_results.length);
-			})
-			res.setHeader('Content-Type', 'application/json');
-			res.status(200).send(stories)
-			console.log(stories)
+            const stories = await getScreenshot(url, type, qual, fullPage);
+            res.setHeader('Content-Type', 'application/json');
+            res.status(200).send(stories);
         }
     } catch (e) {
         console.error(e.message);
