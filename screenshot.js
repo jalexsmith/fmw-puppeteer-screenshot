@@ -12,7 +12,7 @@ module.exports = async function (req, res) {
             res.setHeader('Content-Type', 'text/html');
             res.status(400).send(`<h1>Bad Request</h1><p>The url <em>${url}</em> is not valid.</p>`);
         } else {
-            const stories = await getScreenshot(url, type, qual, fullPage);
+            const stories = await getIndeedSalary(url);
             res.setHeader('Content-Type', 'application/json');
             res.status(200).send(stories);
         }

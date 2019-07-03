@@ -1,7 +1,7 @@
 const chrome = require('chrome-aws-lambda');
 const puppeteer = require('puppeteer-core');
 
-async function getScreenshot(url, type, quality, fullPage) {
+async function getIndeedSalary(url) {
     const browser = await puppeteer.launch({
         args: chrome.args,
         executablePath: await chrome.executablePath,
@@ -10,7 +10,8 @@ async function getScreenshot(url, type, quality, fullPage) {
     
     const page = await browser.newPage();
     
-    await page.goto('https://www.indeed.com/salaries/Warehouse-Supervisor-Salaries,-San%20Francisco-CA')
+    //await page.goto('https://www.indeed.com/salaries/Warehouse-Supervisor-Salaries,-San%20Francisco-CA')
+	await page.goto(url)
 	// execute standard javascript in the context of the page.
 	const stories = await page.evaluate(() => {
 	    const raw_results = Array.from(document.querySelectorAll('div.cmp-sal-salary'))
@@ -32,4 +33,4 @@ async function getScreenshot(url, type, quality, fullPage) {
     return stories;
 }
 
-module.exports = { getScreenshot };
+module.exports = { getIndeedSalary };
