@@ -26,8 +26,6 @@ async function getScreenshot(url, type, quality, fullPage) {
 	    salaries = salaries + ((wages*40)*50);
 	    return Math.round(salaries/raw_results.length);
 	})
-	res.setHeader('Content-Type', 'application/json');
-	res.status(200).send(stories)
 	console.log(stories)
     
     await browser.close();
