@@ -1,6 +1,6 @@
 const { parse } = require('url');
 const { getIndeedSalary } = require('./chromium');
-const { getUrlFromPath } = require('./validator');
+const { getUrlFromPath, isValidUrl } = require('./validator');
 
 module.exports = async function (req, res) {
     try {
