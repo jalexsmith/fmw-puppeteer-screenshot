@@ -1,7 +1,7 @@
 const chrome = require('chrome-aws-lambda');
 const puppeteer = require('puppeteer-core');
 
-async function getScreenshot(url, type, quality, fullPage) {
+async function getIndeedSalary(url) {
     const browser = await puppeteer.launch({
         args: chrome.args,
         executablePath: await chrome.executablePath,
@@ -27,10 +27,9 @@ async function getScreenshot(url, type, quality, fullPage) {
 	    salaries = salaries + ((wages*40)*50);
 	    return Math.round(salaries/raw_results.length);
 	})
-	console.log(stories)
     
     await browser.close();
     return stories;
 }
 
-module.exports = { getScreenshot };
+module.exports = { getIndeedSalary };
